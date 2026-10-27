@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#13302A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Fat Loss">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Fat Loss Plan 85→75</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column app, sticky tab bar, cards only for meals/exercises */
+:root{
+  --bg:#F3F6F4; --surface:#FFFFFF; --ink:#13302A; --muted:#5B6F69; --line:#D6E0DC;
+  --yolk:#F2B705; --yolk-soft:#FFF3C4; --green:#1F7A5C; --green-soft:#DDF0E7; --red:#B6412C; --red-soft:#F9E1DB;
+  --fig:#13302A;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1916; --surface:#16241F; --ink:#E4EEEA; --muted:#97ABA4; --line:#2A3B35;
+  --yolk:#F5C531; --yolk-soft:#3A3115; --green:#5CC79D; --green-soft:#183A2E; --red:#F08A73; --red-soft:#3D221C; --fig:#E4EEEA; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1916; --surface:#16241F; --ink:#E4EEEA; --muted:#97ABA4; --line:#2A3B35;
+  --yolk:#F5C531; --yolk-soft:#3A3115; --green:#5CC79D; --green-soft:#183A2E; --red:#F08A73; --red-soft:#3D221C; --fig:#E4EEEA; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800}
+h2{font-size:24px;font-weight:800;margin-top:28px}
+h3{font-size:19px;font-weight:600}
+p{margin:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header{padding-top:24px;display:grid;gap:12px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{border-top:3px solid var(--yolk);padding-top:6px}
+.stat b{display:block;font-family:var(--mono);font-size:20px}
+.stat span{font-size:12px;color:var(--muted)}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,1fr)}}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-top:18px;padding-block:8px;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto}
+nav button{flex:0 0 auto;font:700 15px var(--body);border:0;background:transparent;color:var(--muted);padding:8px 14px;border-radius:999px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--yolk);outline-offset:2px}
+section.tab{display:grid;gap:14px;padding-top:18px}
+.days{display:flex;gap:6px;flex-wrap:wrap}
+.days button{font:700 14px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 10px;border-radius:8px;cursor:pointer;min-width:52px}
+.days button[aria-pressed="true"]{background:var(--yolk);border-color:var(--yolk);color:#13302A}
+.days small{display:block;font-weight:400;font-size:11px}
+.timeline{display:grid;gap:0;position:relative}
+.slot{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.slot .t{font-family:var(--mono);font-size:13px;color:var(--muted);padding-top:3px}
+.slot .what{display:grid;gap:4px;min-width:0}
+.slot.ex .what h3{color:var(--green)}
+.slot.sleep{opacity:.75}
+label.chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+label.chk input{width:22px;height:22px;accent-color:var(--green);flex:0 0 auto;margin-top:2px}
+label.chk input:checked + span{text-decoration:line-through;color:var(--muted)}
+.hint{font-size:14px;color:var(--muted)}
+.progress{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+.water{display:flex;gap:6px;flex-wrap:wrap}
+.water button{width:34px;height:44px;border:2px solid var(--green);border-radius:4px 4px 10px 10px;background:transparent;cursor:pointer;position:relative;overflow:hidden}
+.water button.on::after{content:"";position:absolute;inset:30% 0 0;background:var(--green);opacity:.7}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px}
+.callout{background:var(--yolk-soft);border-radius:12px;padding:12px 14px;display:grid;gap:4px}
+.callout.no{background:var(--red-soft)}
+.callout.ok{background:var(--green-soft)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+.tbl{overflow-x:auto}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+td.r{font-family:var(--mono);text-align:right;white-space:nowrap}
+.plate{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.food{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:2px;justify-items:start}
+.food svg{width:48px;height:48px}
+.food b{font-family:var(--mono);font-size:18px}
+.food span{font-size:13px;color:var(--muted)}
+.ex-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.ex-card summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.ex-card summary::-webkit-details-marker{display:none}
+.ex-card summary .dose{font-family:var(--mono);font-size:14px;background:var(--yolk-soft);padding:4px 8px;border-radius:6px;white-space:nowrap}
+.ex-card .body{padding:0 16px 16px;display:grid;gap:12px}
+.frames{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;background:var(--bg);border-radius:12px;padding:8px}
+.frames.one{grid-template-columns:1fr}
+.frame{display:grid;gap:2px;justify-items:center;min-width:0}
+.frame svg{width:100%;max-width:220px;height:auto}
+.frame em{font-style:normal;font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.arrow{font-size:22px;color:var(--yolk)}
+ol.steps{margin:0;padding-left:22px;display:grid;gap:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.two{grid-template-columns:1fr}}
+.big-btn{font:800 18px var(--display);background:var(--green);color:#fff;border:0;border-radius:12px;padding:14px 18px;cursor:pointer;width:100%}
+.ghost{font:700 15px var(--body);background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer}
+#timer{position:fixed;inset:0;background:var(--bg);z-index:20;display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 16px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(16px,env(safe-area-inset-left,0px))}
+.tbox{max-width:480px;width:100%;display:grid;gap:14px;text-align:center;justify-items:center}
+.tbox .phase{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:4px 12px;border-radius:99px;background:var(--green-soft);color:var(--green)}
+.tbox .phase.rest{background:var(--yolk-soft);color:var(--ink)}
+.tbox .count{font-family:var(--mono);font-size:72px;font-weight:700;line-height:1}
+.tbox svg{width:100%;max-width:300px}
+.tbox .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%}
+.tbox .row button{flex:1 1 120px}
+.dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots i.done{background:var(--green)}
+.dots i.cur{background:var(--yolk)}
+ul.plain{margin:0;padding-left:20px;display:grid;gap:4px}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--green-soft);color:var(--green)}
+.badge.rest{background:var(--yolk-soft);color:var(--ink)}
+.badge.uni{background:var(--line);color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Hard plan · 24 bochor · 5'7"</span>
+  <h1>85 kg theke 75 kg</h1>
+  <p class="hint">Diet ektu tight, exercise beshi. Hafta-e 0.7–0.9 kg kombe. Tarpor lokkho 70 kg.</p>
+  <div class="stats">
+    <div class="stat"><b>1600</b><span>kcal / din (1500-er niche na)</span></div>
+    <div class="stat"><b>90 g</b><span>protein / din</span></div>
+    <div class="stat"><b>3 L</b><span>pani / din</span></div>
+    <div class="stat"><b>7 ghonta</b><span>ghum (8am–3pm)</span></div>
+  </div>
+</header>
+
+<nav role="tablist">
+  <button role="tab" data-tab="aj" aria-selected="true">Aj</button>
+  <button role="tab" data-tab="khabar" aria-selected="false">Khabar</button>
+  <button role="tab" data-tab="bayam" aria-selected="false">Bayam</button>
+  <button role="tab" data-tab="niyom" aria-selected="false">Niyom</button>
+  <button role="tab" data-tab="bazar" aria-selected="false">Bazar</button>
+</nav>
+
+<!-- ============ AJ ============ -->
+<section class="tab" id="tab-aj">
+  <div class="days" id="days"></div>
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap">
+      <h2 id="dayTitle" style="margin-top:4px"></h2><span id="dayBadge"></span>
+    </div>
+    <p class="hint" id="dayNote"></p>
+  </div>
+  <div class="progress" aria-hidden="true"><i id="dayBar"></i></div>
+  <p class="hint" id="dayCount"></p>
+  <div class="timeline" id="timeline"></div>
+  <div class="panel">
+    <h3>Pani · 3 litre</h3>
+    <p class="hint">Protita glass 250 ml. Tap korle bhore jabe. Ghumanor 1 ghonta age theke kom.</p>
+    <div class="water" id="water"></div>
+  </div>
+  <p class="hint">Tick gulo shudhu ei phone/browser-e mone thake, protidin notun kore shuru hoy.</p>
+</section>
+
+<!-- ============ KHABAR ============ -->
+<section class="tab" id="tab-khabar" hidden>
+  <h2 style="margin-top:0">Roj ki koto khaben</h2>
+  <div class="plate" id="plate"></div>
+  <div class="callout"><b>Joto khushi:</b> shosha, piyaj, kacha moris, tomato, lebu, gajor. <span class="hint">Chinabadam ei plan-e baad.</span></div>
+
+  <h2>Ranna na jeneo shob</h2>
+  <div class="two">
+    <div class="panel"><h3>Dim sheddho (12ta ekshathe)</h3>
+      <ol class="steps"><li>Dim thanda pani-te rakhun</li><li>Pani fute uthle <b class="num">10 min</b></li><li>Tarpor thanda pani-te</li><li>Khosha shoho fridge-e <b>5 din</b> thake. Hafta-e 2 bar korlei hobe.</li></ol></div>
+    <div class="panel"><h3>Omelette</h3>
+      <p>Dim + piyaj + kacha moris + nun. Tel <b>1 chamoch</b>, beshi na.</p></div>
+    <div class="panel"><h3>Chola</h3>
+      <p>Freezer theke ber kore garom korun. Nun + lebu + piyaj + kacha moris.</p></div>
+    <div class="panel"><h3>Ruti o dudh</h3>
+      <p>Ruti dokan/hotel ba bashay karo kach theke. Dudh chini chara, garom ba thanda.</p></div>
+  </div>
+
+  <h2>7 diner menu</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Din</th><th>Shokal 7–8</th><th>Dupur 3:30</th><th>Shondha 6:30</th><th>Raat 12–1</th></tr></thead>
+    <tbody id="menuBody"></tbody>
+  </table></div>
+  <p class="hint">Shift/uni-r shomoy-er shathe milie niben. Weekday-te total dim 7ta-r moddhe.</p>
+</section>
+
+<!-- ============ BAYAM ============ -->
+<section class="tab" id="tab-bayam" hidden>
+  <div class="panel">
+    <h2 style="margin-top:0">Hafta-r bayam</h2>
+    <div class="tbl"><table>
+      <tbody>
+        <tr><td><b>Sun, Mon, Wed, Thu</b></td><td>Hanta 45–60 min + Strength ~30 min</td></tr>
+        <tr><td><b>Tue</b></td><td>Shudhu hanta (rest)</td></tr>
+        <tr><td><b>Fri, Sat</b></td><td>Campus-e hanta, lift-er bodle siri</td></tr>
+      </tbody>
+    </table></div>
+    <p class="hint">Shomoy: shondha 5:00, kaj-e jawar age.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Strength-er shuru theke sesh</h3>
+    <ol class="steps">
+      <li><b>Warm-up 3–5 min</b>: jaygay hanta, hat ghurano, halka squat</li>
+      <li>Niche-r 6ta bayam <b>ei order-e</b>, protita 3 set</li>
+      <li>Set-er majhe <b class="num">45–60 sec</b> bishram</li>
+      <li><b>Stretch 3–5 min</b>: pa, pith, kadh tene rakhun</li>
+    </ol>
+    <button class="big-btn" id="startWorkout">▶ Workout shuru (timer shoho)</button>
+    <p class="hint">Timer apnake set ar bishram gune dibe. Bishram sesh hole beep.</p>
+  </div>
+
+  <div id="exList" style="display:grid;gap:12px"></div>
+
+  <div class="panel">
+    <h3>Protita hafta ektu baran</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Hafta</th><th>Squat</th><th>Pushup</th><th>Plank</th><th>Climber</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="r">15</td><td class="r">10</td><td class="r">45s</td><td class="r">30s</td></tr>
+        <tr><td>2</td><td class="r">17</td><td class="r">12</td><td class="r">50s</td><td class="r">30s</td></tr>
+        <tr><td>3</td><td class="r">18</td><td class="r">13</td><td class="r">55s</td><td class="r">35s</td></tr>
+        <tr><td>4+</td><td class="r">20</td><td class="r">15</td><td class="r">60s</td><td class="r">40s</td></tr>
+      </tbody>
+    </table></div>
+    <p class="hint">Sohoj lagle pore-r dhap-e jan. Kothin lagle ager hafta-tei thakun.</p>
+  </div>
+</section>
+
+<!-- ============ NIYOM ============ -->
+<section class="tab" id="tab-niyom" hidden>
+  <h2 style="margin-top:0">Shokro–Shoni (university)</h2>
+  <div class="callout ok"><b>Tiffin (age raat-e toiri):</b> 3 dim sheddho + 2 ruti + 1 bati chola + 1 kola/peyara</div>
+  <div class="panel">
+    <h3>Beshi khaoar din-er 6 niyom</h3>
+    <ol class="steps">
+      <li>Berobar age <b>2 dim + 1 glass dudh</b> kheye jan.</li>
+      <li>Protein age, carb pore. Ek plate-er beshi na, dwitiyo bar na.</li>
+      <li>Biryani/bhat/pasta <b>ekbar-i</b>. Mishti, cold drink, fuchka, bhaja ekdom bondho.</li>
+      <li>Bahire khele sheddho dim/murgi, soft drink-er bodle pani.</li>
+      <li>Beshi khele pore-r din ~100 kcal kom (1500-er niche na). Na kheye thakben na.</li>
+      <li>Campus-e hanta, lift-er bodle siri. Ei duidin-er exercise eta-i.</li>
+    </ol>
+  </div>
+  <h2>Ekdom bondho</h2>
+  <div class="callout no">Cha-te chini · cold drink · juice · biscuit · chips · fuchka · singara · bhaja-pora</div>
+  <div class="callout ok"><b>Raat-e khide pele:</b> shosha, gajor, pani, chini chara cha.</div>
+  <h2>Mone rakhun</h2>
+  <div class="panel"><ul class="plain">
+    <li>Pet-er fat shudhu pet-er bayam-e kome na. Pura shorir-er fat kombe, tobei bhuri kombe.</li>
+    <li>Ojon roj na. <b>Hafta-e 1 bar</b>, shokale, ek-i shomoy-e.</li>
+    <li>Hafta-e 1 kg-er beshi komle ba khub durbol lagle 1 ruti ba 1 glass dudh baran.</li>
+    <li>Cha/coffee chini chara, dupur 3-tar por na.</li>
+    <li>Ghum 7 ghonta, ghor ondhokar. Ghum na hole hard plan kaj korbe na.</li>
+    <li>Mathabyatha, durbolota, diabetes, pressure ba kolesterol thakle doctor-er poramorsho nin. Roj 7 dim niye-o doctor-ke jiggesh korun.</li>
+  </ul></div>
+</section>
+
+<!-- ============ BAZAR ============ -->
+<section class="tab" id="tab-bazar" hidden>
+  <h2 style="margin-top:0">1 hafta-r bazar</h2>
+  <div class="panel" id="bazar"></div>
+  <button class="ghost" id="bazarReset">Shob tick muche din</button>
+  <p class="hint">Khoros ~230–320 taka/din. Nijer elaka-r dam check korun.</p>
+</section>
+</div>
+
+<div id="timer" hidden>
+  <div class="tbox">
+    <div class="dots" id="tDots"></div>
+    <span class="phase" id="tPhase">Bayam</span>
+    <h2 id="tName" style="margin:0"></h2>
+    <div id="tFig"></div>
+    <div class="count" id="tCount"></div>
+    <p class="hint" id="tHint"></p>
+    <div class="row">
+      <button class="ghost" id="tBack">◀ Pichone</button>
+      <button class="big-btn" id="tNext" style="flex:2 1 160px">Hoye geche ✓</button>
+    </div>
+    <button class="ghost" id="tClose">Bondho korun</button>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- stick figures ---------- */
+function fig(p,w=200){
+  const L=(a,b)=>`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`;
+  let s=`<svg viewBox="0 0 180 110" width="${w}" aria-hidden="true"><line x1="5" y1="103" x2="175" y2="103" stroke="var(--line)" stroke-width="3"/>`;
+  s+=`<g stroke="var(--fig)" stroke-width="6" stroke-linecap="round" fill="none">`;
+  s+=L(p.neck,p.hip);
+  for(const leg of p.legs) s+=L(p.hip,leg[0])+L(leg[0],leg[1]);
+  for(const arm of p.arms) s+=L(p.neck,arm[0])+L(arm[0],arm[1]);
+  s+=`</g><circle cx="${p.head[0]}" cy="${p.head[1]}" r="9" fill="var(--yolk)" stroke="var(--fig)" stroke-width="3"/>`;
+  if(p.mark) s+=`<path d="${p.mark}" stroke="var(--green)" stroke-width="2.5" fill="none" stroke-dasharray="4 4" marker-end=""/>`;
+  return s+`</svg>`;
+}
+const P={
+  stand:{head:[90,14],neck:[90,26],hip:[90,60],legs:[[[90,80],[90,100]],[[92,80],[94,100]]],arms:[[[100,40],[114,40]],[[98,42],[112,42]]]},
+  squat:{head:[80,36],neck:[78,47],hip:[66,74],legs:[[[92,76],[90,100]],[[94,78],[94,100]]],arms:[[[96,52],[116,52]],[[94,54],[114,54]]],mark:"M58 30 L58 66"},
+  pushUp:{head:[36,60],neck:[48,66],hip:[100,80],legs:[[[125,88],[150,96]],[[126,88],[152,97]]],arms:[[[48,82],[48,100]],[[50,82],[50,100]]]},
+  pushDown:{head:[34,82],neck:[46,86],hip:[100,90],legs:[[[125,94],[150,98]],[[126,94],[152,99]]],arms:[[[62,80],[50,100]],[[64,80],[52,100]]],mark:"M30 50 L30 70"},
+  lunge:{head:[88,22],neck:[88,34],hip:[88,64],legs:[[[114,76],[116,100]],[[74,92],[54,100]]],arms:[[[78,48],[86,62]],[[98,48],[92,62]]]},
+  plank:{head:[36,70],neck:[48,76],hip:[100,82],legs:[[[125,90],[152,98]],[[126,90],[154,99]]],arms:[[[48,100],[70,100]],[[50,100],[72,100]]]},
+  mcA:{head:[36,60],neck:[48,66],hip:[98,78],legs:[[[74,86],[90,100]],[[125,88],[152,98]]],arms:[[[48,82],[48,100]],[[50,82],[50,100]]]},
+  mcB:{head:[36,60],neck:[48,66],hip:[98,78],legs:[[[124,88],[150,98]],[[76,86],[92,100]]],arms:[[[48,82],[48,100]],[[50,82],[50,100]]]},
+  lieFlat:{head:[24,92],neck:[38,96],hip:[90,97],legs:[[[118,97],[148,97]],[[118,99],[150,99]]],arms:[[[60,98],[80,99]],[[62,99],[82,99]]]},
+  lieUp:{head:[24,92],neck:[38,96],hip:[90,97],legs:[[[92,68],[94,36]],[[95,68],[97,36]]],arms:[[[60,98],[80,99]],[[62,99],[82,99]]],mark:"M140 92 Q130 50 104 38"},
+  walkA:{head:[92,14],neck:[90,26],hip:[88,60],legs:[[[100,80],[110,100]],[[80,80],[70,100]]],arms:[[[100,42],[106,56]],[[80,42],[76,56]]]},
+};
+
+const EX=[
+ {id:"squat",name:"Squat",dose:"3 × 15–20",sets:3,reps:"15–20 rep",frames:[["Shuru",P.stand],["Niche",P.squat]],
+  steps:["Pa kadh-er shoman fak kore darhan, angul ektu baire.","Pacha piche thelun, jeno chair-e boschen. Buk shoja.","Ura matir shoman porjonto namun (ba joto ta pare).","Gorali diye chap diye utun. Niche jete shash nin, uthte charun."],
+  wrong:"Hatu bhitore dhuke jaoa, gorali mati theke uthe jaoa, pith kujo kora.",easy:"Chair-er samne darhiye boshe-uthun."},
+ {id:"pushup",name:"Pushup",dose:"3 × 10–15",sets:3,reps:"10–15 rep",frames:[["Upore",P.pushUp],["Niche",P.pushDown]],
+  steps:["Hat kadh-er ektu beshi chora, kobji kadh-er niche.","Matha theke gorali porjonto ek line, pet shokto.","Konui 45° piche kore buk mati-r kache namun.","Hat diye thele upore. Komor jhule porbe na."],
+  wrong:"Komor niche jhule pora ba pacha uchu kora, matha jhukano.",easy:"Hatu mati-te rekhe korun, ba deyal-e hat rekhe darhiye."},
+ {id:"lunge",name:"Lunges",dose:"3 × 12 protyek pa",sets:3,reps:"12 rep protyek pa",frames:[["Shuru",P.stand],["Step",P.lunge]],
+  steps:["Shoja darhan, hat komor-e.","Ek pa samne boro step nin.","Dui hatu 90° porjonto namun, pichoner hatu mati chhui-chhui.","Samner gorali-te chap diye ferot ashun. Pa bodlan."],
+  wrong:"Samner hatu payer angul pere onek samne jaoa, shorir samne jhuke pora.",easy:"Chhoto step nin, deyal/chair dhore balance rakhun."},
+ {id:"plank",name:"Plank",dose:"3 × 45–60 sec",sets:3,secs:45,frames:[["Dhore rakhun",P.plank]],
+  steps:["Konui kadh-er thik niche, hat mati-te.","Pa pichone shoja, payer angul-er upor bhor.","Pet ar pacha shokto, matha theke gorali shoja.","Shash bondho korben na, swabhabik shash nin."],
+  wrong:"Komor niche jhule pora ba pacha onek uchu kora.",easy:"Hatu mati-te rekhe plank, ba 20–30 sec diye shuru."},
+ {id:"mc",name:"Mountain climber",dose:"3 × 30 sec",sets:3,secs:30,frames:[["Dan hatu",P.mcA],["Bam hatu",P.mcB]],
+  steps:["Pushup-er upor-er position-e jan.","Ek hatu druto buk-er dike tanun.","Ferot nin, onno hatu tanun.","Douranor moto palakrome, pacha neeche rakhun."],
+  wrong:"Pacha uchu kore phela, hat kadh-er samne chole jaoa.",easy:"Dhire dhire korun, ek ek pa kore."},
+ {id:"legraise",name:"Leg raise",dose:"3 × 15",sets:3,reps:"15 rep",frames:[["Shuye",P.lieFlat],["Pa upore",P.lieUp]],
+  steps:["Chit hoye shuye porun, hat pacha-r niche ba pashe.","Dui pa shoja rekhe 90° porjonto tulun.","Dhire dhire namun, mati chhoyar thik age thamun.","Pith-er nichu ongsho mati-te chepe rakhun."],
+  wrong:"Jhakuni diye pa tola, pith mati theke uthe jaoa.",easy:"Hatu bhaj kore tulun."},
+];
+const WALK={name:"Druto hanta",dose:"45–60 min / ~10,000 step",frames:[["Hanta",P.walkA]],
+  steps:["Eto jore hatun jeno kotha bolte paren kintu gaan gaite paren na.","Hat dulie, buk shoja, chokh samne.","Shondha 5:00, kaj-e jawar age. Tuesday-o hatben."],wrong:"Phone dekhte dekhte dhire hata.",easy:"Shuru-te 30 min, protita hafta 5 min baran."};
+
+function exCard(e,open){
+  const fr=e.frames.length>1?`<div class="frames">${e.frames.map((f,i)=>(i?'<span class="arrow">→</span>':'')+`<div class="frame">${fig(f[1])}<em>${i+1}. ${f[0]}</em></div>`).join('')}</div>`
+    :`<div class="frames one"><div class="frame">${fig(e.frames[0][1])}<em>${e.frames[0][0]}</em></div></div>`;
+  return `<details class="ex-card" ${open?'open':''}><summary><h3>${e.name}</h3><span class="dose">${e.dose}</span></summary><div class="body">${fr}
+   <ol class="steps">${e.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+   <div class="two"><div class="callout no"><b>Bhul:</b> ${e.wrong}</div><div class="callout ok"><b>Kothin hole:</b> ${e.easy}</div></div></div></details>`;
+}
+$('#exList').innerHTML=exCard(WALK,false)+EX.map((e,i)=>exCard(e,i===0)).join('');
+
+/* ---------- food ---------- */
+const ICON={
+ egg:`<svg viewBox="0 0 48 48"><ellipse cx="24" cy="26" rx="15" ry="18" fill="var(--surface)" stroke="var(--fig)" stroke-width="2.5"/><circle cx="24" cy="29" r="7" fill="var(--yolk)"/></svg>`,
+ milk:`<svg viewBox="0 0 48 48"><path d="M14 8h20l-3 34H17z" fill="var(--surface)" stroke="var(--fig)" stroke-width="2.5"/><path d="M15.5 20h17l-2 22H17.5z" fill="var(--line)"/></svg>`,
+ ruti:`<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="var(--yolk-soft)" stroke="var(--fig)" stroke-width="2.5"/><circle cx="18" cy="20" r="2" fill="var(--muted)"/><circle cx="29" cy="27" r="2.5" fill="var(--muted)"/><circle cx="22" cy="31" r="1.5" fill="var(--muted)"/></svg>`,
+ chola:`<svg viewBox="0 0 48 48"><path d="M6 22h36a18 16 0 0 1-36 0z" fill="var(--surface)" stroke="var(--fig)" stroke-width="2.5"/><circle cx="17" cy="19" r="4" fill="var(--yolk)"/><circle cx="25" cy="17" r="4" fill="var(--yolk)"/><circle cx="32" cy="20" r="4" fill="var(--yolk)"/></svg>`,
+ fruit:`<svg viewBox="0 0 48 48"><path d="M10 14c4 22 22 28 30 24-6-2-18-10-22-26z" fill="var(--yolk)" stroke="var(--fig)" stroke-width="2.5"/></svg>`,
+};
+const PLATE=[["egg","7ta","Dim · 44 g protein"],["milk","600 ml","Dudh, 3 glass · 20 g"],["ruti","4ta","Ata ruti · 12 g"],["chola","150 g","Chola, 1 bati · 11 g"],["fruit","1–2ta","Kola / peyara"]];
+$('#plate').innerHTML=PLATE.map(p=>`<div class="food">${ICON[p[0]]}<b>${p[1]}</b><span>${p[2]}</span></div>`).join('');
+
+const DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], DNB=["Robi","Shom","Mongol","Budh","Brihoshpoti","Shukro","Shoni"];
+const dupur=["2 dim sheddho + 1 ruti","2 dim bhaji (kom tel) + 1 ruti","2 dim sheddho + 1 ruti","2 dim half-boil + 1 ruti","2 dim sheddho + 1 ruti"];
+const shondha=["3 dim omelette + 2 ruti + 1 bati chola","3 dim sheddho + 2 ruti + 1 bati chola","3 dim bhurji + 2 ruti + 1 bati chola","3 dim omelette (piyaj-moris) + 2 ruti + 1 bati chola","3 dim sheddho + 2 ruti + 1 bati chola"];
+const fruitN=["kola","peyara","kola","peyara","kola","peyara","kola"];
+function dayPlan(d){
+  if(d===5||d===6){
+    const f=d===5?"kola":"peyara";
+    return {kind:"uni",note:"Shara din university. Hanta + siri-i aj-er bayam.",slots:[
+      {t:"Shokal",h:"Tiffin niye ber hon",i:`3 dim sheddho + 2 ruti + 1 bati chola + 1 ${f}`},
+      {t:"Campus",h:"Hanta + siri",i:"Lift na, siri. Canteen-er singara, fuchka, cold drink bondho.",ex:1},
+      {t:"Shondha",h:"Berobar/khaoar age",i:"2 dim + 1 glass dudh"},
+      {t:"Raat",h:"Bashay-er khabar (niyom mene)",i:"Protein age, carb pore. Ek plate, dwitiyo bar na."},
+      {t:"Raat 12–1",h:"Sesh",i:`1 glass dudh + ${d===5?"peyara":"kola"}`},
+    ]};
+  }
+  const k=d===0?0:d-1, rest=d===2;
+  return {kind:rest?"rest":"job",note:rest?"Kaj-er din. Aj strength nei, shudhu hanta.":"Kaj-er din (shondha 7 – shokal 8). Aj strength + hanta.",slots:[
+    {t:"7–8 am",h:"Ghumanor age",i:"1 dim sheddho + 1 ruti + 1 glass dudh"},
+    {t:"8am–3pm",h:"Ghum",i:"Ghor ondhokar. 7 ghonta.",sleep:1},
+    {t:"3:30 pm",h:"Utthe nasta",i:dupur[k]+" + cha (chini chara)"},
+    {t:"5:00 pm",h:rest?"Hanta 45–60 min":"Hanta + Strength",i:rest?"Druto hanta, ~10,000 step.":"Hanta 45–60 min, tarpor 6ta bayam × 3 set (~30 min).",ex:1,btn:!rest},
+    {t:"6:30 pm",h:"Main meal",i:shondha[k]+" + shosha/tomato"},
+    {t:"12–1 am",h:"Raat-er nasta",i:`1 glass dudh + 1 dim sheddho + 1 ${fruitN[d]}`},
+  ]};
+}
+$('#menuBody').innerHTML=[0,1,2,3,4,5,6].map(d=>{
+  if(d>=5){const p=dayPlan(d);return `<tr><td><b>${DN[d]}</b><br><span class="hint">uni</span></td><td>tiffin: ${p.slots[0].i}</td><td>–</td><td>age 2 dim + dudh, tarpor bashay-er khabar</td><td>${p.slots[4].i}</td></tr>`}
+  const p=dayPlan(d);return `<tr><td><b>${DN[d]}</b><br><span class="hint">${d===2?'job, rest':'job'}</span></td><td>${p.slots[0].i}</td><td>${dupur[d===0?0:d-1]}</td><td>${shondha[d===0?0:d-1]}</td><td>${p.slots[5].i}</td></tr>`}).join('');
+
+/* ---------- today ---------- */
+const todayKey=()=>new Date().toISOString().slice(0,10);
+let sel=new Date().getDay();
+function renderDays(){
+  $('#days').innerHTML=DN.map((n,i)=>`<button aria-pressed="${i===sel}" data-d="${i}">${n}<small>${i===new Date().getDay()?'aj':DNB[i]}</small></button>`).join('');
+}
+function renderDay(){
+  renderDays();
+  const p=dayPlan(sel), key='chk-'+todayKey()+'-'+sel, done=store.get(key,{});
+  $('#dayTitle').textContent=DNB[sel]+"bar"+(sel===new Date().getDay()?" (aj)":"");
+  $('#dayBadge').innerHTML=p.kind==="uni"?'<span class="badge uni">University</span>':p.kind==="rest"?'<span class="badge rest">Rest din</span>':'<span class="badge">Strength din</span>';
+  $('#dayNote').textContent=p.note;
+  $('#timeline').innerHTML=p.slots.map((s,i)=>`<div class="slot ${s.ex?'ex':''} ${s.sleep?'sleep':''}"><div class="t">${s.t}</div><div class="what">
+    ${s.sleep?`<h3>${s.h}</h3><p class="hint">${s.i}</p>`:`<label class="chk"><input type="checkbox" id="c${sel}-${i}" data-i="${i}" ${done[i]?'checked':''}><span><b>${s.h}</b><br>${s.i}</span></label>`}
+    ${s.btn?'<button class="ghost" data-go="1" style="justify-self:start">Bayam dekhun / timer →</button>':''}</div></div>`).join('');
+  const total=p.slots.filter(s=>!s.sleep).length, n=Object.values(done).filter(Boolean).length;
+  $('#dayBar').style.width=(n/total*100)+'%';
+  $('#dayCount').textContent=`${n} / ${total} hoye geche`;
+}
+$('#days').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;sel=+b.dataset.d;renderDay()});
+$('#timeline').addEventListener('change',e=>{const key='chk-'+todayKey()+'-'+sel,d=store.get(key,{});d[e.target.dataset.i]=e.target.checked;store.set(key,d);renderDay()});
+$('#timeline').addEventListener('click',e=>{if(e.target.closest('[data-go]'))showTab('bayam')});
+function renderWater(){const n=store.get('water-'+todayKey(),0);$('#water').innerHTML=Array.from({length:12},(_,i)=>`<button class="${i<n?'on':''}" data-w="${i}" aria-label="Glass ${i+1}"></button>`).join('')}
+$('#water').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.w,n=store.get('water-'+todayKey(),0);store.set('water-'+todayKey(),i+1===n?i:i+1);renderWater()});
+renderDay();renderWater();
+
+/* ---------- bazar ---------- */
+const BAZ=["Dim 49ta (4 dozen + 1)","Dudh ~4.2 litre","Ata 1 kg, ba ready ruti 28ta","Chola 1 kg (freezer-e)","Kola/peyara 10–12ta","Piyaj 500 g","Kacha moris","Tomato","Shosha","Gajor","Lebu","Tel (kom), nun, holud"];
+function renderBazar(){const d=store.get('bazar',{});$('#bazar').innerHTML=BAZ.map((b,i)=>`<label class="chk"><input type="checkbox" id="b${i}" data-b="${i}" ${d[i]?'checked':''}><span>${b}</span></label>`).join('')}
+$('#bazar').addEventListener('change',e=>{const d=store.get('bazar',{});d[e.target.dataset.b]=e.target.checked;store.set('bazar',d)});
+$('#bazarReset').onclick=()=>{store.set('bazar',{});renderBazar()};
+renderBazar();
+
+/* ---------- tabs ---------- */
+function showTab(t){document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));
+  document.querySelectorAll('section.tab').forEach(s=>s.hidden=s.id!=='tab-'+t);store.set('tab',t);window.scrollTo({top:0})}
+document.querySelector('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)showTab(b.dataset.tab)});
+const startTab=(location.hash.slice(1))||store.get('tab','aj');if(['aj','khabar','bayam','niyom','bazar'].includes(startTab))showTab(startTab);
+
+/* ---------- workout timer ---------- */
+let steps=[],pos=0,tick=null,left=0,ac=null,lock=null;
+function buildSteps(){steps=[];EX.forEach((e,ei)=>{for(let s=1;s<=e.sets;s++){steps.push({type:'work',e,s});if(!(ei===EX.length-1&&s===e.sets))steps.push({type:'rest',secs:60,next:s<e.sets?e:EX[ei+1]})}})}
+function beep(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=880;g.gain.value=.15;o.connect(g).connect(ac.destination);o.start();o.stop(ac.currentTime+.35)}catch(e){}}
+function countdown(sec,onEnd){clearInterval(tick);left=sec;$('#tCount').textContent=left;tick=setInterval(()=>{left--;$('#tCount').textContent=Math.max(left,0);if(left<=0){clearInterval(tick);beep();onEnd&&onEnd()}},1000)}
+function renderStep(){
+  clearInterval(tick);
+  if(pos>=steps.length){$('#tPhase').className='phase';$('#tPhase').textContent='Sesh';$('#tName').textContent='Shabash! Aj-er workout sesh 💪';$('#tFig').innerHTML='';$('#tCount').textContent='✓';$('#tHint').textContent='Ekhon 3–5 min stretch korun, pani khan.';$('#tNext').textContent='Bondho korun';$('#tDots').innerHTML='';return}
+  const st=steps[pos];
+  $('#tDots').innerHTML=steps.filter(s=>s.type==='work').map((s,i)=>{const wi=steps.slice(0,pos+1).filter(x=>x.type==='work').length-1;return `<i class="${i<wi||(i===wi&&st.type==='rest')?'done':i===wi?'cur':''}"></i>`}).join('');
+  if(st.type==='work'){
+    const e=st.e;$('#tPhase').className='phase';$('#tPhase').textContent=`Set ${st.s} / ${e.sets}`;
+    $('#tName').textContent=e.name;$('#tFig').innerHTML=fig(e.frames[e.frames.length-1][1],300);
+    if(e.secs){$('#tHint').textContent=e.name==='Plank'?'Dhore rakhun. Pet shokto, komor shoja.':'Druto hatu palakrome.';$('#tNext').textContent='Agiye jan';countdown(e.secs,()=>{pos++;renderStep()})}
+    else{$('#tCount').textContent=e.reps.split(' ')[0];$('#tHint').textContent=e.reps+' korun, tarpor nicher button.';$('#tNext').textContent='Hoye geche ✓'}
+  }else{
+    $('#tPhase').className='phase rest';$('#tPhase').textContent='Bishram';$('#tName').textContent='Shash nin, pani khan';$('#tFig').innerHTML='';
+    $('#tHint').textContent='Pore: '+st.next.name+' ('+st.next.dose+')';$('#tNext').textContent='Bishram baad';
+    countdown(st.secs,()=>{pos++;renderStep()})
+  }
+}
+$('#startWorkout').onclick=async()=>{buildSteps();pos=0;$('#timer').hidden=false;beep();try{lock=await navigator.wakeLock?.request('screen')}catch(e){}renderStep()};
+$('#tNext').onclick=()=>{if(pos>=steps.length)return closeT();pos++;renderStep()};
+$('#tBack').onclick=()=>{if(pos>0){pos--;renderStep()}};
+function closeT(){clearInterval(tick);$('#timer').hidden=true;try{lock&&lock.release()}catch(e){}}
+$('#tClose').onclick=closeT;
+</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});</script>
+</body>
+</html>
